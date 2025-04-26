@@ -14,11 +14,11 @@ app.use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', '*')
     ctx.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, DELETE')
     ctx.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With')
-    ctx.set('Access-Control-Max-Age', '86400') // 预检请求缓存24小时
+    // ctx.set('Access-Control-Max-Age', '86400') // 预检请求缓存24小时
     
     // 处理 OPTIONS 预检请求
     if (ctx.method === 'OPTIONS') {
-        ctx.status = 200
+        ctx.status = 204
         return
     }
     
@@ -32,7 +32,7 @@ app.use(bodyParser())
 
 // 确保跨域中间件在路由中间件之前使用
 app.use(router.routes())
-app.use(router.allowedMethods())
+// app.use(router.allowedMethods())
 
 
 
@@ -62,7 +62,7 @@ router.post('/chatai',async (ctx) => {
 
     ctx.body = {
         code:200,
-        message:respons.data.message.content
+        message:respons.data.message.content.replace(/<think>[\s\S]*?<\/think>/, '')
     }
 })
 
